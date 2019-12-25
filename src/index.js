@@ -25,12 +25,19 @@ const styles = StyleSheet.create({
 })
 
 class CruxScreen extends React.PureComponent<Props, State> {
+    pageTitle: string
+    cruxClient: Object
+    onClosePress: Function
+    onRegisterSuccess: Function
+    onPutAddressSuccess: Function
+    getCruxWebViewInput: Function
+    inputExtension: Object
     state = {
         loading: true,
         currentInputData: {},
     };
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
         this.pageTitle = this.props.navigation.getParam('pageTitle', 'Setup CruxPay');
         this.cruxClient = this.props.navigation.state.params.cruxClient;
@@ -59,7 +66,7 @@ class CruxScreen extends React.PureComponent<Props, State> {
         // this.props.setBrowsingWebView(false);
     }
 
-    cruxPayCallback = async (event) => {
+    cruxPayCallback = async (event: Object) => {
 
         const { putAddressMap, registerCruxID } = this.cruxClient;
         const parsedPostMessage = JSON.parse(event.nativeEvent.data);
