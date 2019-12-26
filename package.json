@@ -4,7 +4,8 @@
   "description": "Importable screens for CRUX ID management",
   "main": "./lib/index.js",
   "scripts": {
-    "complie": "tsc"
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts"
   },
   "files": [
     "lib",
