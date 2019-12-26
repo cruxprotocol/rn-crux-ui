@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import type { NavigationScreenProp } from 'react-navigation';
 import { WebView } from 'react-native-webview';
+import { getCruxWebViewInput } from './utils';
 
 type Props = {
     navigation: NavigationScreenProp<*>,
@@ -25,12 +26,13 @@ const styles = StyleSheet.create({
 })
 
 class CruxScreen extends React.PureComponent<Props, State> {
-    pageTitle: string
+    // pageTitle: string
     cruxClient: Object
     onClosePress: Function
     onRegisterSuccess: Function
     onPutAddressSuccess: Function
     getCruxWebViewInput: Function
+    onError: Function
     inputExtension: Object
     state = {
         loading: true,
@@ -39,27 +41,24 @@ class CruxScreen extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.pageTitle = this.props.navigation.getParam('pageTitle', 'Setup CruxPay');
+        // this.pageTitle = this.props.navigation.getParam('pageTitle', 'Setup CruxPay');
         this.cruxClient = this.props.navigation.state.params.cruxClient;
         this.onClosePress = this.props.navigation.state.params.onClosePress;
         this.onRegisterSuccess = this.props.navigation.state.params.onRegisterSuccess;
         this.onPutAddressSuccess = this.props.navigation.state.params.onPutAddressSuccess;
         this.getCruxWebViewInput = this.props.navigation.state.params.getCruxWebViewInput;
         this.inputExtension = this.props.navigation.state.params.inputExtension;
-    }
-
-    handleError(error: any) {
-        console.error('CruxPay handleError: ', error);
+        this.onError = this.props.navigation.state.params.onError;
     }
 
     componentDidMount = () => {
-        this.getCruxWebViewInput(this.cruxClient, this.inputExtension).then((currentInputData) => {
+        getCruxWebViewInput(this.cruxClient, this.inputExtension).then((currentInputData) => {
             this.setState({
                 loading: false,
                 currentInputData,
             });
             // this.props.setBrowsingWebView(true);
-        }).catch(this.handleError);
+        }).catch(this.onError);
     };
 
     componentWillUnmount() {
@@ -74,14 +73,14 @@ class CruxScreen extends React.PureComponent<Props, State> {
             case 'editExisting':
                 putAddressMap(parsedPostMessage.data.checkedCurrencies).then(async (map) => {
                     await this.onPutAddressSuccess(map);
-                }).catch(this.handleError);
+                }).catch(this.onError);
                 break;
             case 'createNew':
                 registerCruxID(parsedPostMessage.data.newCruxIDSubdomain).then(() => {
                     putAddressMap(parsedPostMessage.data.checkedCurrencies).then(async (map) => {
                         await this.onRegisterSuccess(map);
-                    }).catch(this.handleError);
-                }).catch(this.handleError);
+                    }).catch(this.onError);
+                }).catch(this.onError);
                 break;
             case 'close':
                 this.onClosePress();
@@ -102,13 +101,13 @@ class CruxScreen extends React.PureComponent<Props, State> {
             <View style={[styles.container]}>
                 {loading && <ActivityIndicator size="large" color="#000000" />}
                 {!loading &&
-                <WebView
-                    clearCache={false}
-                    source={{ uri: cruxPayURL }}
-                    originWhitelist={['*']}
-                    onMessage={this.cruxPayCallback}
-                    injectedJavaScript={webviewCallsReact}
-                />
+                    <WebView
+                        clearCache={false}
+                        source={{ uri: cruxPayURL }}
+                        originWhitelist={['*']}
+                        onMessage={this.cruxPayCallback}
+                        injectedJavaScript={webviewCallsReact}
+                    />
                 }
             </View>
         );

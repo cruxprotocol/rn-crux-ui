@@ -13,7 +13,7 @@ export interface ICruxUIOptions {
     onClosePress: Function;
     onRegisterSuccess: Function;
     onPutAddressSuccess: Function;
-    handleError: Function;
+    onError: Function;
 }
 
 export class CruxUI {
@@ -25,7 +25,7 @@ export class CruxUI {
     private _onClosePress;
     private _onRegisterSuccess;
     private _onPutAddressSuccess;
-    private _handleError;
+    private _onError;
     private _navigation;
 
     constructor(options: ICruxUIOptions) {
@@ -41,7 +41,7 @@ export class CruxUI {
         this._onClosePress = options.onClosePress;
         this._onRegisterSuccess = options.onRegisterSuccess;
         this._onPutAddressSuccess = options.onPutAddressSuccess;
-        this._handleError = options.handleError;
+        this._onError = options.onError;
     }
 
     public manage = () => {
@@ -50,7 +50,7 @@ export class CruxUI {
             onClosePress: this._onClosePress,
             onRegisterSuccess: this._onRegisterSuccess,
             onPutAddressSuccess: this._onPutAddressSuccess,
-            handleError: this._handleError,
+            onError: this._onError,
             inputExtension: this._inputExtension,
             cruxClient: this._cruxClient,
         })
