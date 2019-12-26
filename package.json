@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Importable screens for CRUX ID management",
   "main": "./lib/index.js",
-  "scripts": {},
+  "scripts": {
+    "complie": "tsc"
+  },
   "files": [
     "lib",
     "src"
