@@ -1,12 +1,17 @@
 
+export interface IAddress {
+    addressHash: string;
+    secIdentifier?: string;
+}
+
 export interface ICruxWebViewInputExtension {
     theme?: string;
     availableCurrencies: Object;
-    suggestedCruxIDSubdomain: string;
+    suggestedCruxIDSubdomain?: string;
 }
 
 export interface ICruxUIOptions {
-    cruxRouteName: string;
+    cruxRouteName?: string;
     cruxClient: Object;
     inputExtension: ICruxWebViewInputExtension;
     navigation: Object;
