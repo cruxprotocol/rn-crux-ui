@@ -1,7 +1,7 @@
 import map from 'lodash.map';
 
-const getCruxPaySubdomain = (input: string) => {
-    return input.split('@')[0];
+const getCruxPaySubdomain = (cruxIDInput: string) => {
+    return cruxIDInput.split('@')[0];
 };
 
 const getCruxWebViewInput = async (cruxClient: Object, inputExtension: Object) => {
@@ -36,7 +36,18 @@ const getCruxWebViewInput = async (cruxClient: Object, inputExtension: Object) =
     return cruxWebViewInput;
 };
 
+const isValidCruxID = (cruxIDInput: string) => {
+    return cruxIDInput.includes('crux') && cruxIDInput.includes('@') && getCruxPaySubdomain(cruxIDInput).length > 3;
+};
+
+const getCruxUISetupUrl = (cruxClient: Object) => {
+    return 'https://s3-ap-southeast-1.amazonaws.com/files.coinswitch.co/openpay-setup/1.0.1/build/index.html';
+    // return 'https://cruxprotocol.github.io/crux-ui-setup/1.0.0/index.html';
+};
 
 export {
+    getCruxPaySubdomain,
     getCruxWebViewInput,
+    isValidCruxID,
+    getCruxUISetupUrl,
 };
